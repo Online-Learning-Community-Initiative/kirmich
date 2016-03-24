@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class TagDB  extends SQLiteOpenHelper implements ContentDB {
+
     // SharedPreferences
     public static final String MY_PREFS = "rolc-prefs";
     public static final String PREFS_ALL_TAGS = "all-tags";
@@ -18,7 +19,7 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     // SQL Database
     public static final String DB_NAME = "rolc.db";
     public static final String CONTENT_TABLE_NAME = "content";
-    public static final String CONTENT_COLUMN_ID = "id";
+    public static final String CONTENT_COLUMN_ID = "_id";
     public static final String CONTENT_COLUMN_FILENAME = "filename";
     public static final String CONTENT_COLUMN_TYPE = "type";
     public static final String CONTENT_COLUMN_SIZE = "size";
@@ -26,13 +27,14 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     public static final String CONTENT_COLUMN_TAGS = "tags";
 
     public static final String QUERY_CREATE_CONTENT_TABLE = "CREATE TABLE " +
-            CONTENT_TABLE_NAME + " (id integer primary key," +
+            CONTENT_TABLE_NAME + " (_id integer primary key," +
             "filename text, " + "type varchar(255), " + "size integer, " +
             "available boolean, " + "tags text)";
     public static final String QUERY_DROP_CONTENT_TABLE = "DROP TABLE IF EXISTS " +
             CONTENT_TABLE_NAME;
 
     public TagDB(Context context) {
+
         super(context, DB_NAME , null, 1);
     }
 
@@ -44,10 +46,10 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
         }};
     }
 
-    public boolean insertRowContent(int id, String filename, String type, int size, boolean available, String tags) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public boolean insertRowContent(SQLiteDatabase db, int id, String filename, String type, int size, boolean available, String tags) {
+        //SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id", id);
+        contentValues.put("_id", id);
         contentValues.put("filename", filename);
         contentValues.put("type", type);
         contentValues.put("size", size);
@@ -68,7 +70,7 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     }
 
     public Cursor Search(String[] tags, int limit) {
-        String query = "SELECT " + CONTENT_COLUMN_ID + ", " + CONTENT_COLUMN_FILENAME +
+        String query = "SELECT * " + //+ CONTENT_COLUMN_ID + ", " + CONTENT_COLUMN_FILENAME +
                 " FROM " + CONTENT_TABLE_NAME + " WHERE ";
         boolean flag = true;
         for (String tag : tags) {
@@ -88,11 +90,12 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     }
 
     public void onCreate(SQLiteDatabase db) {
+        //db.execSQL(QUERY_DROP_CONTENT_TABLE);
         db.execSQL(QUERY_CREATE_CONTENT_TABLE);
-        this.insertRowContent(1, "adding-worksheet-animals.pdf", "pdf", 336152, true, " addition maths ");
-        this.insertRowContent(2, "http://www.softschools.com/math/addition/learning_addition_for_kids/",
+        this.insertRowContent(db, 1, "adding-worksheet-animals.pdf", "pdf", 336152, true, " addition maths ");
+        this.insertRowContent(db, 2, "http://www.softschools.com/math/addition/learning_addition_for_kids/",
                 "flash", -1, false, " addition maths ");
-        this.insertRowContent(3, "Multiplication Made Easy.3gp", "video", 14796874, true, " maths multiplication ");
+        this.insertRowContent(db, 3, "Multiplication Made Easy.3gp", "video", 14796874, true, " maths multiplication ");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

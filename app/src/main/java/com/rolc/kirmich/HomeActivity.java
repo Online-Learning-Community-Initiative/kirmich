@@ -1,22 +1,30 @@
 package com.rolc.kirmich;
 
+import com.rolc.kirmich.contentdb.*;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.rolc.kirmich.contentdb.TagDB;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.database.DatabaseUtils.dumpCursorToString;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -26,6 +34,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         ListView list = (ListView) findViewById(R.id.starredList);
+
+        /*
         List<String> array_list = new ArrayList<String>();
         array_list.add("Sample 1");
         array_list.add("Sample 2");
@@ -34,6 +44,13 @@ public class HomeActivity extends AppCompatActivity {
         ArrayAdapter<String> listAdapter = new ArrayAdapter<>(
                 getApplicationContext(), R.layout.list_item, array_list);
         list.setAdapter(listAdapter);
+        */
+
+        ContentDB database = new TagDB(getApplicationContext());
+        Cursor cursor = database.Search(new String[]{"addition".trim()}, 0); //TODO: Replace with search query
+        Log.v("CURSOR =======", dumpCursorToString(cursor));
+        CursorAdapter searchAdapter = new SearchAdapter(getApplicationContext(), cursor);
+        list.setAdapter(searchAdapter);
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
