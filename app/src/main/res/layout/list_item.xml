@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:weightSum="1"
+    android:layout_width="318dp"
+    android:layout_height="60dp"
+    android:text="Content Name"
+    android:textSize="40dp"
+    android:textColor="#255"
+    android:id="@+id/listItem"
+    android:layout_weight="0.33">
+
+</TextView>
