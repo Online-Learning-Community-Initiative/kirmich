@@ -1,12 +1,13 @@
 package com.rolc.kirmich.contentdb;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.widget.ListAdapter;
 
 import java.util.Set;
 
 public interface ContentDB {
-    Set<String> getAllTags(Context context);
-    Cursor Search(String[] tags, int limit);
+    Set<String> getAllTags();
+    ListAdapter searchTags(String[] tags);
+    ListAdapter getStarred();
     void getItem(int id);
 }
