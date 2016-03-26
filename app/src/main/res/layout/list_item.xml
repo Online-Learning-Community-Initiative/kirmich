@@ -16,14 +16,14 @@
         android:layout_weight="0.33">
     </TextView>
 
-    <ImageButton
-        android:id="@+id/starButton"
+    <ImageButton android:id="@+id/starButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@android:drawable/btn_star"
+        android:background="#00ffffff"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#00ffffff" />
+        android:onClick="onToggleStar"/>
 
 </LinearLayout>
 

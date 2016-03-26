@@ -2,6 +2,7 @@ package com.rolc.kirmich;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +27,10 @@ public class SearchAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView fileName = (TextView) view.findViewById(R.id.listItem);
         ImageButton star = (ImageButton) view.findViewById(R.id.starButton);
-
         String text = cursor.getString(cursor.getColumnIndex("filename"));
+        //TODO: Replace the next line with the 'isStarred' field.
         boolean isStarred = cursor.getInt(cursor.getColumnIndex("available")) > 0;
-
         fileName.setText(text);
-        //TODO: star.setText(String.valueOf(priority));
+        //TODO: Set star state based on isStarred
     }
 }

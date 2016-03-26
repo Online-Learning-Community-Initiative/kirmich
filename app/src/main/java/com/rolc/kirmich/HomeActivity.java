@@ -1,9 +1,12 @@
 package com.rolc.kirmich;
 
 import com.rolc.kirmich.contentdb.*;
+
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rolc.kirmich.contentdb.TagDB;
 
@@ -47,7 +51,8 @@ public class HomeActivity extends AppCompatActivity {
         */
 
         ContentDB database = new TagDB(getApplicationContext());
-        Cursor cursor = database.Search(new String[]{"addition".trim()}, 0); //TODO: Replace with search query
+        //TODO: Replace the next line with search query for starred content.
+        Cursor cursor = database.Search(new String[]{"addition_maths".trim()}, 0);
         Log.v("CURSOR =======", dumpCursorToString(cursor));
         CursorAdapter searchAdapter = new SearchAdapter(getApplicationContext(), cursor);
         list.setAdapter(searchAdapter);
@@ -87,12 +92,18 @@ public class HomeActivity extends AppCompatActivity {
 
     public void onButtonClick(View view) {
         EditText query = (EditText) findViewById(R.id.searchField);
-        String queryString = query.toString();
-
-        //Query the db.
-
-        Intent resultIntent = new Intent(getApplicationContext(), ResultActivity.class);
-        //TODO: resultIntent.putExtra();
-        startActivity(resultIntent);
+        String queryString = query.getText().toString();
+        if (queryString == null || queryString.length() == 0) {
+            Toast toast = new Toast(getApplicationContext());
+            toast.setText("Please type a query!");
+            toast.show();
+            Vibrator a = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            a.vibrate(50);
+        } else {
+            Log.v("SEARCHED FOR ====", queryString);
+            Intent resultIntent = new Intent(getApplicationContext(), ResultActivity.class);
+            resultIntent.putExtra("QUERY", queryString);
+            startActivity(resultIntent);
+        }
     }
 }
