@@ -42,12 +42,25 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
         this.context = context;
     }
 
-    Set<String> fetchAllTagsFromDB() {
-        return new HashSet<String>() {{
-            add("addition");
-            add("maths");
-            add("multiplication");
-        }};
+    Set<String> fetchAllTagsFromDB(SQLiteDatabase db) {
+        String query = "SELECT " + CONTENT_COLUMN_TAGS + " FROM " + CONTENT_TABLE_NAME;
+        Set all_tags = new HashSet<String>();
+        Cursor cursor = db.rawQuery(query, null);
+        try {
+            while (cursor.moveToNext()) {
+                String text = cursor.getString(cursor.getColumnIndex(TagDB.CONTENT_COLUMN_TAGS));
+                String[] tags = text.split(" ");
+                for (String tag: tags ) {
+                    all_tags.add(tag.trim());
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+
+        SharedPreferences shprefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
+        shprefs.edit().putStringSet(PREFS_ALL_TAGS, all_tags);
+        return all_tags;
     }
 
     public boolean insertRowContent(SQLiteDatabase db, int id, String filename, String type,
@@ -66,8 +79,9 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     public Set<String> getAllTags() {
         SharedPreferences shprefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
         Set<String> all_tags = shprefs.getStringSet(PREFS_ALL_TAGS, null);
+        SQLiteDatabase db = this.getReadableDatabase();
         if(all_tags == null) {
-            return this.fetchAllTagsFromDB();
+            return this.fetchAllTagsFromDB(db);
         } else {
             return all_tags;
         }
@@ -92,7 +106,11 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
 
     @Override
     public ListAdapter getStarred() {
-        return null;
+        String query = "SELECT * FROM " + CONTENT_TABLE_NAME + " WHERE " +
+                CONTENT_COLUMN_STARRED + "=1";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        return new TagSearchAdapter(this, cursor);
     }
 
     public void getItem(int id) {
@@ -103,7 +121,7 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
         String strFilter = CONTENT_COLUMN_ID + "=" + id;
         ContentValues args = new ContentValues();
         args.put(CONTENT_COLUMN_STARRED, isSelected);
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.update(CONTENT_TABLE_NAME, args, strFilter, null);
     }
 
