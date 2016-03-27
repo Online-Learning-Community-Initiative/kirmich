@@ -18,38 +18,47 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:showIn="@layout/activity_home">
 
-
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Search"
             android:id="@+id/searchField"
-            android:textSize="22dp"
+            android:textSize="20dp"
+            android:hint="Search"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+            android:drawableLeft="@android:drawable/ic_menu_search"
             android:layout_marginBottom="15dp"
-            android:editable="true"/>
+            android:editable="true"
+            android:layout_toLeftOf="@+id/searchButton"
+            android:layout_toStartOf="@+id/searchButton" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Go"
             android:id="@+id/searchButton"
-            android:layout_below="@+id/searchField"
-            android:layout_centerHorizontal="true"
             android:clickable="true"
-            android:onClick="onButtonClick"/>
+            android:onClick="onButtonClick"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/starredList"
+            android:id="@+id/resultList"
             android:layout_below="@+id/searchButton"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="35dp" />
     </RelativeLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/starredContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/btn_star" />
 
 </android.support.design.widget.CoordinatorLayout>

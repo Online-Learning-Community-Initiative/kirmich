@@ -7,18 +7,20 @@
     <TextView
         android:orientation="horizontal"
         android:weightSum="1"
+        android:layout_marginTop="5dp"
         android:layout_width="318dp"
-        android:layout_height="60dp"
+        android:layout_height="30dp"
         android:text="Content Name"
-        android:textSize="40dp"
+        android:textSize="20dp"
         android:textColor="#255"
+        android:elegantTextHeight="true"
         android:id="@+id/listItem"
         android:layout_weight="0.33">
     </TextView>
 
     <ImageButton android:id="@+id/starButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/star"
         android:background="#00ffffff"
         android:layout_alignParentBottom="true"
