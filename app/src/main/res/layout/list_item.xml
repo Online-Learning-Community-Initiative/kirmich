@@ -15,7 +15,8 @@
         android:textColor="#255"
         android:elegantTextHeight="true"
         android:id="@+id/listItem"
-        android:layout_weight="0.33">
+        android:layout_weight="0.33"
+        android:clickable="true">
     </TextView>
 
     <ImageButton android:id="@+id/starButton"

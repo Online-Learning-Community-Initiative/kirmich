@@ -1,4 +1,4 @@
-package com.rolc.kirmich.contentdb;
+package com.rolc.kirmich;
 
 import android.content.ContentValues;
 import android.content.Context;

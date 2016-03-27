@@ -1,6 +1,5 @@
-package com.rolc.kirmich.contentdb;
+package com.rolc.kirmich;
 
-import android.content.Context;
 import android.widget.ListAdapter;
 
 import java.util.Set;

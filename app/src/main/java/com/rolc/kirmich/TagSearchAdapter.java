@@ -1,16 +1,14 @@
-package com.rolc.kirmich.contentdb;
+package com.rolc.kirmich;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.rolc.kirmich.R;
 
 public class TagSearchAdapter extends CursorAdapter {
     private TagDB tagdb;
@@ -26,7 +24,7 @@ public class TagSearchAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         TextView fileName = (TextView) view.findViewById(R.id.listItem);
         ImageButton star = (ImageButton) view.findViewById(R.id.starButton);
         String text = cursor.getString(cursor.getColumnIndex(TagDB.CONTENT_COLUMN_FILENAME));
@@ -34,6 +32,16 @@ public class TagSearchAdapter extends CursorAdapter {
         fileName.setText(text);
         star.setSelected(isStarred);
         final String id = cursor.getString(cursor.getColumnIndex(TagDB.CONTENT_COLUMN_ID));
+
+        fileName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent detailIntent = new Intent(context, DetailActivity.class);
+                detailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // TODO: detailIntent.putExtra();
+                context.startActivity(detailIntent);
+            }
+        });
 
         star.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,5 +51,6 @@ public class TagSearchAdapter extends CursorAdapter {
                 tagdb.setStar(id, star.isSelected());
             }
         });
+
     }
 }

@@ -1,19 +1,12 @@
 package com.rolc.kirmich;
 
-import com.rolc.kirmich.contentdb.ContentDB;
-import com.rolc.kirmich.contentdb.TagDB;
-
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -26,6 +19,11 @@ public class HomeActivity extends AppCompatActivity {
         super();
     }
 
+    public void setListView(ListAdapter l_adapter) {
+        ListView list = (ListView) findViewById(R.id.resultList);
+        list.setAdapter(l_adapter);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,26 +31,14 @@ public class HomeActivity extends AppCompatActivity {
         database = new TagDB(getApplicationContext());
 
         ListAdapter l_adapter = database.getStarred();
-        ListView list = (ListView) findViewById(R.id.resultList);
-        list.setAdapter(l_adapter);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("ITEM CLICKED ==== ", "YESSSSSSS");
-                Intent detailIntent = new Intent(getApplicationContext(), DetailActivity.class);
-                // TODO: detailIntent.putExtra();
-                startActivity(detailIntent);
-            }
-        });
+        setListView(l_adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.starredContent);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListView list = (ListView) findViewById(R.id.resultList);
                 ListAdapter l_adapter = database.getStarred();
-                list.setAdapter(l_adapter);
+                setListView(l_adapter);
             }
         });
 
@@ -85,7 +71,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onButtonClick(View view) {
-        ListView list = (ListView) findViewById(R.id.resultList);
         EditText query = (EditText) findViewById(R.id.searchField);
         String queryString = query.getText().toString();
         if (queryString == null || queryString.length() == 0) {
@@ -97,8 +82,7 @@ public class HomeActivity extends AppCompatActivity {
             // TODO: Add the real queries into the stringArray (Parse the queryString)
             stringArray[0] = "addition_maths".trim(); //DUMMY
             ListAdapter l_adapter = database.searchTags(stringArray);
-            list.setAdapter(l_adapter);
-
+            setListView(l_adapter);
         }
     }
 }
