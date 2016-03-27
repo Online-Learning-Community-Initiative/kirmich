@@ -7,10 +7,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 public class HomeActivity extends AppCompatActivity {
     private ContentDB database;
@@ -32,6 +37,12 @@ public class HomeActivity extends AppCompatActivity {
 
         ListAdapter l_adapter = database.getStarred();
         setListView(l_adapter);
+
+        MultiAutoCompleteTextView textView = (MultiAutoCompleteTextView) findViewById(R.id.searchField);
+        ArrayAdapter<String> tv_adapter = new ArrayAdapter<String>(
+                getApplicationContext(), R.layout.search_field, new ArrayList<>(database.getAllTags()));
+        textView.setAdapter(tv_adapter);
+        textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.starredContent);
         fab.setOnClickListener(new View.OnClickListener() {
