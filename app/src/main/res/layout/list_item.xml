@@ -19,11 +19,10 @@
     <ImageButton android:id="@+id/starButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@android:drawable/btn_star"
+        android:src="@drawable/star"
         android:background="#00ffffff"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onToggleStar"/>
+        android:layout_centerHorizontal="true" />
 
 </LinearLayout>
 

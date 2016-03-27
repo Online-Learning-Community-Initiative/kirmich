@@ -28,7 +28,7 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     public static final String CONTENT_COLUMN_STARRED = "favourite";
 
     // data members
-    private Context context = null;
+    public Context context = null;
     private static final String QUERY_CREATE_CONTENT_TABLE = "CREATE TABLE " +
             CONTENT_TABLE_NAME + " (" + CONTENT_COLUMN_ID + " integer primary key, " +
             CONTENT_COLUMN_FILENAME + " text, " + CONTENT_COLUMN_TYPE + " varchar(255), " +
@@ -87,7 +87,7 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        return new TagSearchAdapter(this.context, cursor);
+        return new TagSearchAdapter(this, cursor);
     }
 
     @Override
@@ -96,6 +96,15 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     }
 
     public void getItem(int id) {
+    }
+
+    @Override
+    public void setStar(String id, boolean isSelected) {
+        String strFilter = CONTENT_COLUMN_ID + "=" + id;
+        ContentValues args = new ContentValues();
+        args.put(CONTENT_COLUMN_STARRED, isSelected);
+        SQLiteDatabase db = getReadableDatabase();
+        db.update(CONTENT_TABLE_NAME, args, strFilter, null);
     }
 
     public void onCreate(SQLiteDatabase db) {
