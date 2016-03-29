@@ -12,10 +12,12 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tokenautocomplete.TokenCompleteTextView;
+
 import java.util.ArrayList;
-import java.util.Set;
 
 public class HomeActivity extends AppCompatActivity {
     private ContentDB database;
@@ -40,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MultiAutoCompleteTextView textView = (MultiAutoCompleteTextView) findViewById(R.id.searchField);
         ArrayAdapter<String> tv_adapter = new ArrayAdapter<String>(
-                getApplicationContext(), R.layout.search_field, new ArrayList<>(database.getAllTags()));
+                getApplicationContext(), R.layout.drop_down_text_view, new ArrayList<>(database.getAllTags()));
         textView.setAdapter(tv_adapter);
         textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
