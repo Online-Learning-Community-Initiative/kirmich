@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
 
         MultiAutoCompleteTextView textView = (MultiAutoCompleteTextView) findViewById(R.id.searchField);
         ArrayAdapter<String> tv_adapter = new ArrayAdapter<String>(
-                getApplicationContext(), R.layout.drop_down_text_view, new ArrayList<>(database.getAllTags()));
+                getApplicationContext(), android.R.layout.simple_list_item_1, new ArrayList<>(database.getAllTags()));
         textView.setAdapter(tv_adapter);
         textView.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
