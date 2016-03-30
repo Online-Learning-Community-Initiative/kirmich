@@ -30,10 +30,10 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     // data members
     public Context context = null;
     private static final String QUERY_CREATE_CONTENT_TABLE = "CREATE TABLE " +
-            CONTENT_TABLE_NAME + " (" + CONTENT_COLUMN_ID + " integer primary key, " +
-            CONTENT_COLUMN_FILENAME + " text, " + CONTENT_COLUMN_TYPE + " varchar(255), " +
-            CONTENT_COLUMN_SIZE + " integer, " + CONTENT_COLUMN_AVAILABLE + " boolean, " +
-            CONTENT_COLUMN_TAGS + " text, " + CONTENT_COLUMN_STARRED + " boolean)";
+            CONTENT_TABLE_NAME + " (" + CONTENT_COLUMN_ID + " INTEGER PRIMARY KEY, " +
+            CONTENT_COLUMN_FILENAME + " TEXT, " + CONTENT_COLUMN_TYPE + " TEXT, " +
+            CONTENT_COLUMN_SIZE + " INTEGER, " + CONTENT_COLUMN_AVAILABLE + " INTEGER, " +
+            CONTENT_COLUMN_TAGS + " TEXT, " + CONTENT_COLUMN_STARRED + " INTEGER)";
     private static final String QUERY_DROP_CONTENT_TABLE = "DROP TABLE IF EXISTS " +
             CONTENT_TABLE_NAME;
 
@@ -59,7 +59,9 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
         }
 
         SharedPreferences shprefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
-        shprefs.edit().putStringSet(PREFS_ALL_TAGS, all_tags);
+        SharedPreferences.Editor editor = shprefs.edit();
+        editor.putStringSet(PREFS_ALL_TAGS, all_tags);
+        editor.commit();
         return all_tags;
     }
 
@@ -79,8 +81,8 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
     public Set<String> getAllTags() {
         SharedPreferences shprefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
         Set<String> all_tags = shprefs.getStringSet(PREFS_ALL_TAGS, null);
-        SQLiteDatabase db = this.getReadableDatabase();
         if(all_tags == null) {
+            SQLiteDatabase db = this.getReadableDatabase();
             return this.fetchAllTagsFromDB(db);
         } else {
             return all_tags;
@@ -92,10 +94,10 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
         boolean flag = true;
         for (String tag : tags) {
             if (flag) {
-                query += "tags LIKE \" " + tag + " \"";
+                query += CONTENT_COLUMN_TAGS + " LIKE \"% " + tag + " %\"";
                 flag = false;
             } else {
-                query += " OR tags LIKE \" " + tag + " \"";
+                query += " OR " + CONTENT_COLUMN_TAGS + " LIKE \"% " + tag + " %\"";
             }
         }
 
@@ -131,11 +133,39 @@ public class TagDB  extends SQLiteOpenHelper implements ContentDB {
                 " addition maths ", false);
         this.insertRowContent(db, 2, "http://www.softschools.com/math/addition/learning_addition_for_kids/",
                 "flash", -1, false, " addition maths ", false);
-        this.insertRowContent(db, 3, "Multiplication Made Easy.3gp", "video", 14796874, true,
-                " maths multiplication ", false);
+        this.insertRowContent(db, 3, "5_ways_to_learn_addition.txt",
+                "txt", 4228, false, " addition maths ", false);
+        this.insertRowContent(db, 4, "Enjoy Learning Addition puzzle",
+                "android", 2621440, false, " addition maths ", false);
+        this.insertRowContent(db, 5, "http://www.learn-with-math-games.com/",
+                "html", -1, false, " maths ", false);
+        this.insertRowContent(db, 6, "http://www.multiplication.com/learn/fact-navigator",
+                "html", -1, false, " maths multiplication ", false);
+        this.insertRowContent(db, 7, "Multiplication Made Easy.3gp",
+                "video", 14796874, true, " maths multiplication ", false);
+        this.insertRowContent(db, 8, "Basic Addition for Kids.mp4",
+                "video", 3920312, true, " maths addition ", false);
+        this.insertRowContent(db, 9, "https://www.mathsisfun.com/numbers/division.html",
+                "html", -1, false, " maths division ", false);
+        this.insertRowContent(db, 10, "https://www.mathsisfun.com/definitions/multiplication.html",
+                "html", -1, false, " maths multiplication ", false);
+        this.insertRowContent(db, 11, "http://www.coolmath4kids.com/fractions/fractions-01-what-are-they-01.html",
+                "html", -1, false, " maths fraction ", false);
+        this.insertRowContent(db, 12, "http://math.tutorvista.com/number-system/like-fractions.html",
+                "html", -1, false, " maths fraction addition subtract ", false);
+        this.insertRowContent(db, 13, "https://www.mathsisfun.com/percentage.html",
+                "html", -1, false, " maths percentage ", false);
+        this.insertRowContent(db, 14, "https://www.mathsisfun.com/algebra/proportions.html",
+                "html", -1, false, " maths proportion ", false);
+        this.insertRowContent(db, 15, "https://quizlet.com/16102523/basic-geometry-terms-with-pictures-flash-cards/",
+                "html", -1, false, " geometry ", false);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        SharedPreferences shprefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shprefs.edit();
+        editor.remove(PREFS_ALL_TAGS);
+        editor.apply();
         db.execSQL(QUERY_DROP_CONTENT_TABLE);
         onCreate(db);
     }

@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tokenautocomplete.TokenCompleteTextView;
@@ -90,10 +89,7 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Please type a query!", Toast.LENGTH_LONG).show();
         } else {
             Log.v("SEARCHED FOR ====", queryString);
-
-            String stringArray[] = new String[10];
-            // TODO: Add the real queries into the stringArray (Parse the queryString)
-            stringArray[0] = "addition_maths".trim(); //DUMMY
+            String [] stringArray = queryString.trim().split("\\s*,\\s*");
             ListAdapter l_adapter = database.searchTags(stringArray);
             setListView(l_adapter);
         }
